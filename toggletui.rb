@@ -11,17 +11,19 @@ class Toggletui < Formula
     system "go", "build", *std_go_args(ldflags: "-s -w")
   end
 
-  def post_install
-    # Ensure Go bin directory is in PATH
-    go_bin = "#{ENV["HOME"]}/go/bin"
-
-    ohai "ToggleTUI installed successfully!"
-    ohai "Get your API token from: https://track.toggl.com/profile"
-    ohai ""
-    ohai "Run 'toggletui' to start. You'll be prompted for your API token on first run."
+  def caveats
+    <<~EOS
+      ToggleTUI has been installed!
+      
+      Get your API token from: https://track.toggl.com/profile
+      
+      Run 'toggletui' to start. You'll be prompted for your API token on first run.
+      
+      The token will be saved in: ~/.config/toggletui/token
+    EOS
   end
 
   test do
-    assert_match "ToggleTUI", shell_output("#{bin}/toggletui --help 2>&1", 1)
+    assert_match "First Time Setup", shell_output("#{bin}/toggletui 2>&1", 1)
   end
 end
